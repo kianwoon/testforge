@@ -1,7 +1,7 @@
 # bot/bot/teams_adapter.py
 import logging
-from bot.test_case_parser import TestCaseParser
-from bot.models import TestCaseSpec
+from .test_case_parser import TestCaseParser
+from .models import TestCaseSpec
 from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)

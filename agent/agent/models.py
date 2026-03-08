@@ -39,6 +39,6 @@ class Manifest(BaseModel):
     version: str = "1.0.0"
     last_updated: datetime = Field(default_factory=datetime.utcnow)
     statistics: Dict[str, int] = Field(
-        default_factory=lambda: {"total_jobs": 0, "completed": 0, "failed": 0, "pending": 0}
+        default_factory=lambda: {"total_jobs": 0, "completed": 0, "failed": 0, "pending": 0, "processing": 0}
     )
     jobs: List[ManifestEntry] = Field(default_factory=list)

@@ -1,3 +1,4 @@
+import asyncio
 import json
 import uuid
 from pathlib import Path
@@ -15,7 +16,7 @@ class ManifestManager:
     def __init__(self, shared_volume_path: str = "/nanoclaw"):
         self.shared_volume = Path(shared_volume_path)
         self.manifest_path = self.shared_volume / "manifest.json"
-        self._lock = None
+        self._lock = asyncio.Lock()
 
     async def _load_manifest(self) -> Manifest:
         """Load manifest from disk, or create new if doesn't exist."""
@@ -49,21 +50,22 @@ class ManifestManager:
         Create a new job entry in the manifest.
         Returns the unique job ID (UUID4).
         """
-        manifest = await self._load_manifest()
+        async with self._lock:
+            manifest = await self._load_manifest()
 
-        job_id = str(uuid.uuid4())
-        entry = ManifestEntry(
-            job_id=job_id,
-            status=JobStatus.PENDING,
-            test_case=test_case
-        )
+            job_id = str(uuid.uuid4())
+            entry = ManifestEntry(
+                job_id=job_id,
+                status=JobStatus.PENDING,
+                test_case=test_case
+            )
 
-        manifest.jobs.append(entry)
-        manifest.statistics["total_jobs"] += 1
-        manifest.statistics["pending"] += 1
+            manifest.jobs.append(entry)
+            manifest.statistics["total_jobs"] += 1
+            manifest.statistics["pending"] += 1
 
-        await self._save_manifest(manifest)
-        return job_id
+            await self._save_manifest(manifest)
+            return job_id
 
     async def update_job_status(
         self,
@@ -75,30 +77,36 @@ class ManifestManager:
         Update job status and optional fields.
         Handles statistics tracking automatically.
         """
-        manifest = await self._load_manifest()
+        async with self._lock:
+            manifest = await self._load_manifest()
 
-        for job in manifest.jobs:
-            if job.job_id == job_id:
-                old_status = job.status
-                job.status = status
+            for job in manifest.jobs:
+                if job.job_id == job_id:
+                    old_status = job.status
+                    job.status = status
 
-                if status == JobStatus.COMPLETED:
-                    job.completed_at = datetime.utcnow()
-                    manifest.statistics["completed"] += 1
-                    manifest.statistics["pending"] -= 1
-                elif status == JobStatus.FAILED:
-                    manifest.statistics["failed"] += 1
-                    manifest.statistics["pending"] -= 1
-                elif old_status == JobStatus.PENDING and status == JobStatus.PROCESSING:
-                    manifest.statistics["pending"] -= 1
+                    # Decrement whichever counter the job is leaving
+                    if old_status == JobStatus.PENDING:
+                        manifest.statistics["pending"] = max(0, manifest.statistics["pending"] - 1)
+                    elif old_status == JobStatus.PROCESSING:
+                        manifest.statistics["processing"] = max(0, manifest.statistics["processing"] - 1)
 
-                # Update any additional fields passed via kwargs
-                for key, value in kwargs.items():
-                    setattr(job, key, value)
+                    # Increment counter for new status
+                    if status == JobStatus.PROCESSING:
+                        manifest.statistics["processing"] += 1
+                    elif status == JobStatus.COMPLETED:
+                        job.completed_at = datetime.utcnow()
+                        manifest.statistics["completed"] += 1
+                    elif status == JobStatus.FAILED:
+                        manifest.statistics["failed"] += 1
 
-                break
+                    # Update any additional fields passed via kwargs
+                    for key, value in kwargs.items():
+                        setattr(job, key, value)
 
-        await self._save_manifest(manifest)
+                    break
+
+            await self._save_manifest(manifest)
 
     async def get_job(self, job_id: str) -> Optional[ManifestEntry]:
         """
