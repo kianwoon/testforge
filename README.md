@@ -1,6 +1,6 @@
 # NanoClow
 
-AI-driven Playwright test generation via WhatsApp.
+AI-driven Playwright test generation via WhatsApp and Microsoft Teams.
 
 ## What is NanoClow?
 
@@ -9,7 +9,7 @@ NanoClow is an internal QA automation tool that:
 - Uses AI (Claude) to generate async Playwright Python scripts
 - Follows Registry-First architecture (extends POM, never duplicates)
 - Validates scripts with syntax checking and DOM cross-reference
-- Notifies team via WhatsApp when scripts are ready
+- Notifies team via WhatsApp or Microsoft Teams when scripts are ready
 
 ## Quick Start
 
@@ -19,22 +19,59 @@ git clone <repo>
 cd nanoclaw
 ./scripts/setup.sh
 
-# 2. Configure environment
-nano .env  # Add your Claude API key and WhatsApp credentials
+# The interactive CLI will guide you through:
+# - Claude API key (required)
+# - Agent and Bot settings (with defaults)
+# - WhatsApp configuration (optional)
+# - Microsoft Teams configuration (optional)
+# - Docker settings (with defaults)
 
-# 3. Start services
+# 2. Start services
 cd docker && docker-compose up
 
 # Or run in background:
 docker-compose up -d
 ```
 
+### Setup Example
+
+When you run `./scripts/setup.sh`, you'll see an interactive prompt:
+
+```
+🔧 NanoClow Interactive Setup
+==================================================
+
+📝 Section 1/6: Claude API Configuration
+
+Enter your Claude API key:
+sk-ant-xxx...
+✓ API key validated
+
+⚙️  Section 2/6: Agent Settings
+
+Agent host [0.0.0.0]: ⏎
+Agent port [8000]: ⏎
+...
+
+================================
+📋 Configuration Preview
+================================
+ANTHROPIC_API_KEY=sk-ant-...
+AGENT_HOST=0.0.0.0
+...
+
+Write to .env? [Y/n]: Y
+✅ Configuration written to .env
+📁 Creating shared volume directories...
+✅ Setup complete!
+```
+
 ## Architecture
 
 ```
-WhatsApp Users
+WhatsApp/Teams Users
     ↓
-WhatsApp Bot (interface layer)
+Bot Layer (WhatsApp/Teams interface)
     ↓ HTTP API
 Agent Sandbox (generator)
     ↓
@@ -74,14 +111,15 @@ Health check endpoint.
 
 ```
 nanoclaw/
-├── bot/              # WhatsApp bot service
+├── bot/              # Multi-platform bot service (WhatsApp/Teams)
 ├── agent/            # Agent sandbox service
 ├── shared/           # Docker volume mount
 │   ├── ingress/      # Incoming test cases
 │   ├── egress/       # Generated scripts
 │   ├── page_objects/ # POM registry
 │   └── manifest.json # Source of truth
-└── docker/           # Container configurations
+├── docker/           # Container configurations
+└── scripts/          # Setup and utility scripts
 ```
 
 ## Development
