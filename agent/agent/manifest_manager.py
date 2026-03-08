@@ -69,7 +69,7 @@ class ManifestManager:
             async with aiofiles.open(self.manifest_path, 'r') as f:
                 data = json.loads(await f.read())
                 return Manifest(**data)
-        except (json.JSONDecodeError, Exception) as e:
+        except (json.JSONDecodeError, OSError, PermissionError) as e:
             logger.warning(f"Failed to load manifest, creating fresh: {e}")
             return Manifest()
 
@@ -134,7 +134,7 @@ class ManifestManager:
         # Validate kwargs early
         for key in kwargs:
             if key not in ALLOWED_UPDATE_FIELDS:
-                raise ValueError(f"Unexpected field '{key}'. Allowed: {ALLOWD_UPDATE_FIELDS}")
+                raise ValueError(f"Unexpected field '{key}'. Allowed: {ALLOWED_UPDATE_FIELDS}")
 
         async with self._get_lock():
             manifest = await self._load_manifest()
@@ -191,8 +191,8 @@ class ManifestManager:
             status: The job status to filter by
 
         Returns:
-            List of jobs matching the status
+            List of jobs matching the status (copies, safe to mutate)
         """
         async with self._get_lock():
             manifest = await self._load_manifest()
-            return [job for job in manifest.jobs if job.status == status]
+            return [job.model_copy() for job in manifest.jobs if job.status == status]
