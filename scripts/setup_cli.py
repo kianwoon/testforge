@@ -309,12 +309,12 @@ class ConfigSetup:
 
         project_name = self.prompt_optional(
             'COMPOSE_PROJECT_NAME',
-            'Docker Compose project name [nanoclaw]:',
-            default='nanoclaw'
+            'Docker Compose project name [testforge]:',
+            default='testforge'
         )
 
         return {
-            'COMPOSE_PROJECT_NAME': project_name or 'nanoclaw'
+            'COMPOSE_PROJECT_NAME': project_name or 'testforge'
         }
 
     def preview_and_write(self, config):

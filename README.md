@@ -16,7 +16,7 @@ NanoClow is an internal QA automation tool that:
 ```bash
 # 1. Clone and setup
 git clone <repo>
-cd nanoclaw
+cd testforge
 ./scripts/setup.sh
 
 # The interactive CLI will guide you through:
@@ -168,7 +168,7 @@ TEAMS_APP_PASSWORD=your_teams_app_password_here
 TEAMS_PORT=3978
 
 # Docker (with defaults)
-COMPOSE_PROJECT_NAME=nanoclaw
+COMPOSE_PROJECT_NAME=testforge
 ```
 
 ### Updating Configuration
@@ -207,7 +207,7 @@ To update your configuration after initial setup:
 ## Directory Structure
 
 ```
-nanoclaw/
+testforge/
 ├── bot/              # Multi-platform bot service (WhatsApp/Teams)
 ├── agent/            # Agent sandbox service
 ├── shared/           # Docker volume mount
