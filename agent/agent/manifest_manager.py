@@ -16,7 +16,37 @@ class ManifestManager:
     def __init__(self, shared_volume_path: str = "/nanoclaw"):
         self.shared_volume = Path(shared_volume_path)
         self.manifest_path = self.shared_volume / "manifest.json"
-        self._lock = asyncio.Lock()
+        self._lock: Optional[asyncio.Lock] = None  # Lazy init
+
+    def _get_lock(self) -> asyncio.Lock:
+        """Get or create lock lazily (requires running event loop)."""
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+        return self._lock
+
+    def _update_statistics(
+        self,
+        statistics: dict,
+        old_status: JobStatus,
+        new_status: JobStatus
+    ) -> None:
+        """Update statistics counters for status transitions."""
+        status_to_counter = {
+            JobStatus.PENDING: "pending",
+            JobStatus.PROCESSING: "processing",
+            JobStatus.COMPLETED: "completed",
+            JobStatus.FAILED: "failed",
+        }
+
+        # Decrement old status counter
+        if old_status in status_to_counter:
+            counter = status_to_counter[old_status]
+            statistics[counter] = max(0, statistics.get(counter, 0) - 1)
+
+        # Increment new status counter
+        if new_status in status_to_counter:
+            counter = status_to_counter[new_status]
+            statistics[counter] = statistics.get(counter, 0) + 1
 
     async def _load_manifest(self) -> Manifest:
         """Load manifest from disk, or create new if doesn't exist."""
@@ -50,7 +80,7 @@ class ManifestManager:
         Create a new job entry in the manifest.
         Returns the unique job ID (UUID4).
         """
-        async with self._lock:
+        async with self._get_lock():
             manifest = await self._load_manifest()
 
             job_id = str(uuid.uuid4())
@@ -76,35 +106,35 @@ class ManifestManager:
         """
         Update job status and optional fields.
         Handles statistics tracking automatically.
+
+        Raises:
+            ValueError: If job_id is not found in manifest
         """
-        async with self._lock:
+        async with self._get_lock():
             manifest = await self._load_manifest()
 
+            job_found = False
             for job in manifest.jobs:
                 if job.job_id == job_id:
                     old_status = job.status
                     job.status = status
 
-                    # Decrement whichever counter the job is leaving
-                    if old_status == JobStatus.PENDING:
-                        manifest.statistics["pending"] = max(0, manifest.statistics["pending"] - 1)
-                    elif old_status == JobStatus.PROCESSING:
-                        manifest.statistics["processing"] = max(0, manifest.statistics["processing"] - 1)
+                    # Update statistics counters
+                    self._update_statistics(manifest.statistics, old_status, status)
 
-                    # Increment counter for new status
-                    if status == JobStatus.PROCESSING:
-                        manifest.statistics["processing"] += 1
-                    elif status == JobStatus.COMPLETED:
+                    # Set completed_at for completed jobs
+                    if status == JobStatus.COMPLETED:
                         job.completed_at = datetime.utcnow()
-                        manifest.statistics["completed"] += 1
-                    elif status == JobStatus.FAILED:
-                        manifest.statistics["failed"] += 1
 
                     # Update any additional fields passed via kwargs
                     for key, value in kwargs.items():
                         setattr(job, key, value)
 
+                    job_found = True
                     break
+
+            if not job_found:
+                raise ValueError(f"Job {job_id} not found in manifest")
 
             await self._save_manifest(manifest)
 
