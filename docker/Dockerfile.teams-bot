@@ -1,0 +1,18 @@
+# docker/Dockerfile.teams-bot
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY bot/requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy bot code
+COPY bot/ ./bot/
+COPY shared/ ./shared/
+
+# Expose port
+EXPOSE 3978
+
+# Run Teams bot server
+CMD ["python", "-m", "bot.teams_main"]

@@ -70,6 +70,26 @@ Get job status and details.
 **GET /health**
 Health check endpoint.
 
+### Teams Bot API (port 3978)
+
+**POST /api/messages**
+Webhook endpoint for Microsoft Teams bot framework. Receives messages from Teams channels and processes test case submissions.
+
+**GET /health**
+Health check endpoint for Teams bot service.
+
+## Teams Integration Setup
+
+NanoClow supports Microsoft Teams as an additional interface for test case submission. See [docs/teams-setup.md](docs/teams-setup.md) for detailed setup instructions.
+
+### Quick Overview
+
+1. Register a bot in Azure Portal
+2. Generate an App Password
+3. Configure NanoClaw environment variables
+4. Enable Teams channel in Azure
+5. Test the bot in Teams
+
 ## Directory Structure
 
 ```

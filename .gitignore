@@ -20,6 +20,9 @@ shared/ingress/*
 .idea/
 *.swp
 
+# Worktrees
+.worktrees/
+
 # Logs
 *.log
 shared/logs/*
