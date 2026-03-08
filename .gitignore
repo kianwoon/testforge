@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+
+# NanoClow
+shared/egress/*
+shared/ingress/*
+!shared/egress/.gitkeep
+!shared/ingress/.gitkeep
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Logs
+*.log
+shared/logs/*
