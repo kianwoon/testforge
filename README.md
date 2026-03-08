@@ -1,10 +1,10 @@
-# NanoClow
+# TestForge
 
 AI-driven Playwright test generation via WhatsApp and Microsoft Teams.
 
-## What is NanoClow?
+## What is TestForge?
 
-NanoClow is an internal QA automation tool that:
+TestForge is an internal QA automation tool that:
 - Accepts test cases via structured natural language
 - Uses AI (Claude) to generate async Playwright Python scripts
 - Follows Registry-First architecture (extends POM, never duplicates)
@@ -48,7 +48,7 @@ This is useful if you want to reconfigure your environment or update specific se
 When you run `./scripts/setup.sh`, you'll see an interactive prompt:
 
 ```
-🔧 NanoClow Interactive Setup
+🔧 TestForge Interactive Setup
 ==================================================
 
 📝 Section 1/6: Claude API Configuration
@@ -127,13 +127,13 @@ Health check endpoint for Teams bot service.
 
 ## Teams Integration Setup
 
-NanoClow supports Microsoft Teams as an additional interface for test case submission. See [docs/teams-setup.md](docs/teams-setup.md) for detailed setup instructions.
+TestForge supports Microsoft Teams as an additional interface for test case submission. See [docs/teams-setup.md](docs/teams-setup.md) for detailed setup instructions.
 
 ### Quick Overview
 
 1. Register a bot in Azure Portal
 2. Generate an App Password
-3. Configure NanoClaw environment variables
+3. Configure TestForge environment variables
 4. Enable Teams channel in Azure
 5. Test the bot in Teams
 
