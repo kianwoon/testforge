@@ -14,11 +14,11 @@ class TeamsConfig(BaseModel):
     def validate_app_id(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError('App ID cannot be empty')
-        return v
+        return v.strip()
 
     @field_validator('app_password')
     @classmethod
     def validate_app_password(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError('App password cannot be empty')
-        return v
+        return v.strip()
