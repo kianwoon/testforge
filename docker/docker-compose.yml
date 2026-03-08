@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  agent:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.agent
+    container_name: nanoclaw-agent
+    volumes:
+      - ../shared:/nanoclaw
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  bot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.bot
+    container_name: nanoclaw-bot
+    depends_on:
+      - agent
+    ports:
+      - "5000:5000"
+    env_file:
+      - ../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+volumes:
+  shared_volume:
