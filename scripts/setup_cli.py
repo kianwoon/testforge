@@ -8,6 +8,10 @@ validating inputs and creating .env file without manual editing.
 import os
 import sys
 from pathlib import Path
+from colorama import init, Fore, Style
+
+# Initialize colorama for cross-platform support
+init(autoreset=True)
 
 
 class ConfigSetup:
@@ -19,6 +23,32 @@ class ConfigSetup:
         self.env_example = self.project_root / ".env.example"
         self.env_file = self.project_root / ".env"
         self.shared_path = self.project_root / "shared"
+
+    # Color helper methods
+    @staticmethod
+    def success(msg):
+        """Print success message in green."""
+        print(f"{Fore.GREEN}{msg}{Style.RESET_ALL}")
+
+    @staticmethod
+    def error(msg):
+        """Print error message in red."""
+        print(f"{Fore.RED}{msg}{Style.RESET_ALL}")
+
+    @staticmethod
+    def warning(msg):
+        """Print warning message in yellow."""
+        print(f"{Fore.YELLOW}{msg}{Style.RESET_ALL}")
+
+    @staticmethod
+    def info(msg):
+        """Print info message in cyan."""
+        print(f"{Fore.CYAN}{msg}{Style.RESET_ALL}")
+
+    @staticmethod
+    def header(msg):
+        """Print header in bold blue."""
+        print(f"{Fore.BLUE}{Style.BRIGHT}{msg}{Style.RESET_ALL}")
 
     def run(self):
         """Run the interactive setup process."""
@@ -44,7 +74,7 @@ class ConfigSetup:
     def print_header(self):
         """Print setup header."""
         print("\n" + "="*50)
-        print("🔧 NanoClow Interactive Setup")
+        self.header("🔧 NanoClow Interactive Setup")
         print("="*50 + "\n")
 
     def prompt_required(self, key, description, validator=None):
@@ -69,15 +99,15 @@ class ConfigSetup:
                     try:
                         validated = validator(value)
                         if validated is None or validated is False:
-                            print(f"⚠️  Invalid value. Please try again.\n")
+                            self.warning("⚠️  Invalid value. Please try again.\n")
                             continue
                         return validated
                     except ValueError as e:
-                        print(f"❌ {e}")
+                        self.error(f"❌ {e}")
                         continue
                 return value
 
-            print("⚠️  This field is required. Please enter a value.\n")
+            self.warning("⚠️  This field is required. Please enter a value.\n")
 
     def prompt_optional(self, key, description, default=None):
         """
@@ -174,12 +204,12 @@ class ConfigSetup:
             validator=lambda x: self.validate_api_key(x)
         )
 
-        print("✓ API key validated\n")
+        self.success("✓ API key validated\n")
         return {'ANTHROPIC_API_KEY': api_key}
 
     def setup_agent(self):
         """Setup Agent settings."""
-        print("\n⚙️  Section 2/6: Agent Settings\n")
+        self.info("\n⚙️  Section 2/6: Agent Settings\n")
 
         host = self.prompt_optional(
             'AGENT_HOST',
@@ -207,7 +237,7 @@ class ConfigSetup:
 
     def setup_bot(self):
         """Setup Bot settings."""
-        print("\n🤖 Section 3/6: Bot Settings\n")
+        self.info("\n🤖 Section 3/6: Bot Settings\n")
 
         host = self.prompt_optional(
             'BOT_HOST',
@@ -235,7 +265,7 @@ class ConfigSetup:
 
     def setup_whatsapp(self):
         """Setup WhatsApp configuration (optional)."""
-        print("\n📱 Section 4/6: WhatsApp Configuration (optional)")
+        self.info("\n📱 Section 4/6: WhatsApp Configuration (optional)")
         print("Press ENTER to skip this section...\n")
 
         phone_id = self.prompt_optional('WHATSAPP_PHONE_NUMBER_ID', 'Phone number ID:')
@@ -253,7 +283,7 @@ class ConfigSetup:
 
     def setup_teams(self):
         """Setup Teams configuration (optional)."""
-        print("\n💬 Section 5/6: Microsoft Teams Configuration (optional)")
+        self.info("\n💬 Section 5/6: Microsoft Teams Configuration (optional)")
         print("Press ENTER to skip this section...\n")
 
         app_id = self.prompt_optional('TEAMS_APP_ID', 'Teams App ID:')
@@ -275,7 +305,7 @@ class ConfigSetup:
 
     def setup_docker(self):
         """Setup Docker configuration."""
-        print("\n🐳 Section 6/6: Docker Settings\n")
+        self.info("\n🐳 Section 6/6: Docker Settings\n")
 
         project_name = self.prompt_optional(
             'COMPOSE_PROJECT_NAME',
@@ -308,9 +338,9 @@ class ConfigSetup:
         response = input("Write to .env? [Y/n]: ").strip().lower()
         if response == 'y':
             self.write_env_file(config)
-            print("✅ Configuration written to .env\n")
+            self.success("✅ Configuration written to .env\n")
         else:
-            print("❌ Setup cancelled. No changes made.")
+            self.error("❌ Setup cancelled. No changes made.")
             sys.exit(0)
 
     def write_env_file(self, config):
@@ -340,12 +370,12 @@ class ConfigSetup:
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
 
-        print("✅ Directories created\n")
+        self.success("✅ Directories created\n")
 
     def print_success(self):
         """Print success message and next steps."""
         print("="*50)
-        print("✅ Setup complete!")
+        self.success("✅ Setup complete!")
         print("="*50)
         print("\nTo start NanoClow:")
         print("  cd docker && docker-compose up")
