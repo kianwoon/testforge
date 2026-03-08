@@ -2,10 +2,10 @@
 import pytest
 import tempfile
 from pathlib import Path
-from bot.bot.test_case_parser import TestCaseParser
-from bot.bot.agent_client import AgentAPIClient
-from agent.agent.manifest_manager import ManifestManager
-from agent.agent.models import TestCaseSpec, JobStatus
+from bot.test_case_parser import TestCaseParser
+from bot.agent_client import AgentAPIClient
+from agent.manifest_manager import ManifestManager
+from agent.models import TestCaseSpec, JobStatus
 
 @pytest.mark.asyncio
 async def test_submit_and_retrieve_job():
