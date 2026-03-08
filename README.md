@@ -33,6 +33,16 @@ cd docker && docker-compose up
 docker-compose up -d
 ```
 
+### Running the Setup CLI Directly
+
+You can also run the interactive setup CLI directly without the full setup script:
+
+```bash
+python3 scripts/setup_cli.py
+```
+
+This is useful if you want to reconfigure your environment or update specific settings.
+
 ### Setup Example
 
 When you run `./scripts/setup.sh`, you'll see an interactive prompt:
@@ -126,6 +136,73 @@ NanoClow supports Microsoft Teams as an additional interface for test case submi
 3. Configure NanoClaw environment variables
 4. Enable Teams channel in Azure
 5. Test the bot in Teams
+
+## Configuration
+
+### Environment Variables
+
+After running the setup script, your `.env` file will contain:
+
+```bash
+# Required
+ANTHROPIC_API_KEY=sk-ant-xxx...
+
+# Agent Settings (with defaults)
+AGENT_HOST=0.0.0.0
+AGENT_PORT=8000
+SHARED_VOLUME_PATH=/nanoclaw
+
+# Bot Settings (with defaults)
+BOT_HOST=0.0.0.0
+BOT_PORT=5000
+AGENT_API_URL=http://agent:8000
+
+# WhatsApp (optional)
+WHATSAPP_PHONE_NUMBER_ID=your_phone_id
+WHATSAPP_ACCESS_TOKEN=your_access_token
+WHATSAPP_WEBHOOK_VERIFY_TOKEN=your_verify_token
+
+# Microsoft Teams (optional)
+TEAMS_APP_ID=your_teams_app_id_here
+TEAMS_APP_PASSWORD=your_teams_app_password_here
+TEAMS_PORT=3978
+
+# Docker (with defaults)
+COMPOSE_PROJECT_NAME=nanoclaw
+```
+
+### Updating Configuration
+
+To update your configuration after initial setup:
+
+1. Re-run the setup CLI: `python3 scripts/setup_cli.py`
+2. Or edit `.env` directly (changes take effect on restart)
+3. Restart services: `cd docker && docker-compose restart`
+
+## Troubleshooting
+
+### Setup Issues
+
+**Problem:** Setup CLI fails to validate API key
+- **Solution:** Ensure your API key starts with `sk-ant-` and is at least 20 characters
+
+**Problem:** Port already in use
+- **Solution:** Change the port number in the setup CLI or stop conflicting services
+
+**Problem:** Docker build fails
+- **Solution:** Ensure Docker is running and you have sufficient disk space
+
+### Runtime Issues
+
+**Problem:** Services not starting
+- **Solution:** Check logs with `docker-compose logs` and verify `.env` configuration
+
+**Problem:** Bot not receiving messages
+- **Solution:** Verify webhook configuration and network connectivity
+
+**Problem:** Agent not generating scripts
+- **Solution:** Check ANTHROPIC_API_KEY is valid and has sufficient credits
+
 
 ## Directory Structure
 
