@@ -57,3 +57,36 @@ async def test_format_error_message():
 
     assert "❌" in formatted or "Error" in formatted
     assert "Missing required field" in formatted
+
+@pytest.mark.asyncio
+async def test_parse_empty_message():
+    """Test parsing empty message returns None."""
+    adapter = TeamsMessageAdapter()
+    result = await adapter.parse_message("")
+    assert result is None
+
+@pytest.mark.asyncio
+async def test_parse_whitespace_message():
+    """Test parsing whitespace-only message returns None."""
+    adapter = TeamsMessageAdapter()
+    result = await adapter.parse_message("   \n\t  ")
+    assert result is None
+
+@pytest.mark.asyncio
+async def test_format_status_with_missing_fields():
+    """Test formatting status with incomplete data."""
+    adapter = TeamsMessageAdapter()
+
+    # Missing test_case
+    status = {"job_id": "job-123", "status": "pending"}
+    formatted = await adapter.format_status(status)
+    assert "job-123" in formatted
+    assert "Unknown Test" in formatted
+
+@pytest.mark.asyncio
+async def test_format_error_with_long_message():
+    """Test formatting long error message."""
+    adapter = TeamsMessageAdapter()
+    long_error = "Error: " + "x" * 500
+    formatted = await adapter.format_error(long_error)
+    assert "Error:" in formatted

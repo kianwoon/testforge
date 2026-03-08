@@ -1,7 +1,10 @@
 # bot/bot/teams_adapter.py
+import logging
 from bot.test_case_parser import TestCaseParser
 from bot.models import TestCaseSpec
 from typing import Optional, Dict, Any
+
+logger = logging.getLogger(__name__)
 
 
 class TeamsMessageAdapter:
@@ -21,8 +24,14 @@ class TeamsMessageAdapter:
             TestCaseSpec if valid, None otherwise
         """
         try:
+            # Validate message is not empty or whitespace
+            if not message or not message.strip():
+                logger.warning("Empty or whitespace-only message received")
+                return None
+
             return await self.parser.parse(message)
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to parse Teams message: {e}")
             return None
 
     async def format_status(self, status: Dict[str, Any]) -> str:
