@@ -30,3 +30,19 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
+
+  teams-bot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.teams-bot
+    container_name: nanoclaw-teams-bot
+    depends_on:
+      - agent
+    ports:
+      - "3978:3978"
+    env_file:
+      - ../.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - AGENT_URL=http://agent:8000
+    restart: unless-stopped
