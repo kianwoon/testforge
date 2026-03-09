@@ -32,7 +32,7 @@ RUN playwright install chromium
 COPY agent/ /app/
 
 # Create shared volume directories
-RUN mkdir -p /nanoclaw/{ingress,egress,page_objects,html_dumps,logs}
+RUN mkdir -p /testforge/{ingress,egress,page_objects,html_dumps,logs}
 
 # Expose port
 EXPOSE 8000

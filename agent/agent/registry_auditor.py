@@ -6,7 +6,7 @@ from datetime import datetime
 from .models import RegistryEntry
 
 class RegistryAuditor:
-    def __init__(self, page_objects_path: str = "/nanoclaw/page_objects"):
+    def __init__(self, page_objects_path: str = "/testforge/page_objects"):
         self.page_objects_path = Path(page_objects_path)
 
     async def audit(self) -> Dict[str, RegistryEntry]:

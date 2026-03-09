@@ -8,7 +8,7 @@ venv/
 env/
 .venv/
 
-# NanoClow
+# TestForge
 shared/egress/*
 shared/ingress/*
 !shared/egress/.gitkeep

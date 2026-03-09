@@ -11,7 +11,7 @@ _manifest_manager = None
 def get_manifest_manager(shared_volume_path: Optional[str] = None):
     global _manifest_manager
     if _manifest_manager is None:
-        path = shared_volume_path or os.getenv("SHARED_VOLUME_PATH", "/tmp/nanoclaw")
+        path = shared_volume_path or os.getenv("SHARED_VOLUME_PATH", "/tmp/testforge")
         _manifest_manager = ManifestManager(shared_volume_path=path)
     return _manifest_manager
 

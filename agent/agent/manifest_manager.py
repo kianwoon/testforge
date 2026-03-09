@@ -25,7 +25,7 @@ class ManifestManager:
     Manages the atomic manifest.json operations - the source of truth for job state.
     """
 
-    def __init__(self, shared_volume_path: str = "/nanoclaw"):
+    def __init__(self, shared_volume_path: str = "/testforge"):
         self.shared_volume = Path(shared_volume_path)
         self.manifest_path = self.shared_volume / "manifest.json"
         self._lock: Optional[asyncio.Lock] = None  # Lazy init

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-NanoClow Interactive Setup CLI
+TestForge Interactive Setup CLI
 
 Guides users through interactive configuration setup,
 validating inputs and creating .env file without manual editing.
@@ -15,7 +15,7 @@ init(autoreset=True)
 
 
 class ConfigSetup:
-    """Interactive configuration setup for NanoClaw."""
+    """Interactive configuration setup for TestForge."""
 
     def __init__(self):
         """Initialize the configuration setup."""
@@ -74,7 +74,7 @@ class ConfigSetup:
     def print_header(self):
         """Print setup header."""
         print("\n" + "="*50)
-        self.header("🔧 NanoClow Interactive Setup")
+        self.header("🔧 TestForge Interactive Setup")
         print("="*50 + "\n")
 
     def prompt_required(self, key, description, validator=None):
@@ -225,14 +225,14 @@ class ConfigSetup:
 
         volume = self.prompt_optional(
             'SHARED_VOLUME_PATH',
-            'Shared volume path [/nanoclaw]:',
-            default='/nanoclaw'
+            'Shared volume path [/testforge]:',
+            default='/testforge'
         )
 
         return {
             'AGENT_HOST': host or '0.0.0.0',
             'AGENT_PORT': str(port),
-            'SHARED_VOLUME_PATH': volume or '/nanoclaw'
+            'SHARED_VOLUME_PATH': volume or '/testforge'
         }
 
     def setup_bot(self):
@@ -377,7 +377,7 @@ class ConfigSetup:
         print("="*50)
         self.success("✅ Setup complete!")
         print("="*50)
-        print("\nTo start NanoClow:")
+        print("\nTo start TestForge:")
         print("  cd docker && docker-compose up")
         print()
 

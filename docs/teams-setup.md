@@ -1,6 +1,6 @@
 # Microsoft Teams Integration Setup Guide
 
-This guide walks you through setting up NanoClow integration with Microsoft Teams, allowing team members to submit test cases directly from Teams channels.
+This guide walks you through setting up TestForge integration with Microsoft Teams, allowing team members to submit test cases directly from Teams channels.
 
 ## Prerequisites
 
@@ -8,7 +8,7 @@ Before starting, ensure you have:
 
 - **Azure Account**: An active Azure subscription with permissions to register applications
 - **Microsoft Teams Access**: Ability to add apps to Teams channels
-- **NanoClow Deployment**: A running instance of NanoClow (local or cloud)
+- **TestForge Deployment**: A running instance of TestForge (local or cloud)
 - **Public Endpoint**: For production, a publicly accessible HTTPS endpoint (port 3978)
   - For local development, use [ngrok](https://ngrok.com/) to create a tunnel
 
@@ -20,7 +20,7 @@ Before starting, ensure you have:
 2. Search for **Azure Bot** in the search bar and select it
 3. Click **Create** to register a new bot
 4. Fill in the required information:
-   - **Bot Handle**: A unique identifier for your bot (e.g., `nanoclaw-bot`)
+   - **Bot Handle**: A unique identifier for your bot (e.g., `testforge-bot`)
    - **Subscription**: Your Azure subscription
    - **Resource Group**: Create new or select existing
    - **Pricing Tier**: Standard or Free (F0) for development
@@ -37,15 +37,15 @@ Once created, note down the **Microsoft App ID** - you'll need this for configur
 2. Find the **Microsoft App ID** section
 3. Click **Manage Password (Secret)** or navigate to **Certificates & secrets**
 4. Click **New client secret**
-5. Enter a description (e.g., "NanoClow Integration") and select an expiration
+5. Enter a description (e.g., "TestForge Integration") and select an expiration
 6. Click **Add**
 7. **IMPORTANT**: Copy the **Value** (not the Secret ID) immediately - you won't be able to see it again
 
 ---
 
-## Step 3: Configure NanoClaw
+## Step 3: Configure TestForge
 
-Update your NanoClaw `.env` file with the Teams configuration:
+Update your TestForge `.env` file with the Teams configuration:
 
 ```env
 # Microsoft Teams Bot Configuration
@@ -53,7 +53,7 @@ TEAMS_APP_ID=<your-microsoft-app-id>
 TEAMS_APP_PASSWORD=<your-app-password-value>
 TEAMS_BOT_PORT=3978
 
-# Existing NanoClaw configuration
+# Existing TestForge configuration
 CLAUDE_API_KEY=<your-claude-api-key>
 # ... other settings
 ```
@@ -72,7 +72,7 @@ CLAUDE_API_KEY=<your-claude-api-key>
 
 ### Production Setup
 
-1. Deploy NanoClaw with the Teams bot service accessible at a public HTTPS endpoint
+1. Deploy TestForge with the Teams bot service accessible at a public HTTPS endpoint
 2. Ensure port 3978 (or your configured port) is accessible
 3. Your webhook URL will be: `https://your-domain.com/api/messages`
 
@@ -107,7 +107,7 @@ Your webhook URL will be: `https://abc123.ngrok.io/api/messages`
 3. Accept the Terms of Service
 4. Configure channel settings:
    - **Messaging**: Enable messaging
-   - **Calling**: Not required for NanoClow
+   - **Calling**: Not required for TestForge
 5. Click **Apply** or **Save**
 
 ### Add Bot to Teams
@@ -115,7 +115,7 @@ Your webhook URL will be: `https://abc123.ngrok.io/api/messages`
 1. In the Teams channel configuration, click on the link to open in Teams
 2. Or manually add the bot:
    - Open Microsoft Teams
-   - Go to the channel where you want to use NanoClow
+   - Go to the channel where you want to use TestForge
    - Click the three dots (...) next to the channel name
    - Select **Manage channel** > **Connectors** or use **Apps**
    - Search for your bot by name
@@ -145,7 +145,7 @@ Expected response:
 1. Open the Teams channel where you added the bot
 2. Type a message to the bot (mention it if configured):
    ```
-   @NanoClow generate test for login flow
+   @TestForge generate test for login flow
    ```
 3. The bot should respond with acknowledgment
 
@@ -236,7 +236,7 @@ Expected: User redirected to dashboard
 ### Data Handling
 
 - Test case data may contain sensitive information
-- Ensure proper data handling in your NanoClaw deployment
+- Ensure proper data handling in your TestForge deployment
 - Follow your organization's data governance policies
 
 ### Permissions
@@ -252,12 +252,12 @@ Expected: User redirected to dashboard
 - [Microsoft Bot Framework Documentation](https://docs.microsoft.com/en-us/azure/bot-service/)
 - [Bot Framework SDK](https://github.com/microsoft/botframework-sdk)
 - [ngrok Documentation](https://ngrok.com/docs)
-- [NanoClaw API Documentation](./api.md)
+- [TestForge API Documentation](./api.md)
 
 ---
 
 ## Support
 
 For issues with:
-- **NanoClow**: Contact the QA automation team
+- **TestForge**: Contact the QA automation team
 - **Azure/Teams**: Consult your Azure administrator or Microsoft support

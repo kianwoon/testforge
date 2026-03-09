@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class NanoClawTeamsBot(ActivityHandler):
-    """Teams bot handler for NanoClaw test automation."""
+    """Teams bot handler for TestForge test automation."""
 
     def __init__(
         self,
@@ -62,7 +62,7 @@ class NanoClawTeamsBot(ActivityHandler):
     async def _handle_help(self) -> str:
         """Handle help command."""
         return """
-**NanoClaw Bot Help**
+**TestForge Bot Help**
 
 I help you generate Playwright test scripts from natural language test cases.
 

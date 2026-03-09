@@ -102,12 +102,12 @@ class TestConfigSetup:
         """Test Agent settings section."""
         setup = ConfigSetup()
 
-        with patch('builtins.input', side_effect=['0.0.0.0', '8000', '/nanoclaw']):
+        with patch('builtins.input', side_effect=['0.0.0.0', '8000', '/testforge']):
             result = setup.setup_agent()
             assert result == {
                 'AGENT_HOST': '0.0.0.0',
                 'AGENT_PORT': '8000',
-                'SHARED_VOLUME_PATH': '/nanoclaw'
+                'SHARED_VOLUME_PATH': '/testforge'
             }
 
     def test_setup_bot_section(self):

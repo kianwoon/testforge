@@ -1,5 +1,5 @@
 #!/bin/bash
 
-echo "🚀 Starting NanoClow in development mode..."
+echo "🚀 Starting TestForge in development mode..."
 cd docker
 docker-compose up --build

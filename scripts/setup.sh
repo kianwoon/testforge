@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "🔧 NanoClow Setup"
+echo "🔧 TestForge Setup"
 echo "================="
 
 # Run interactive Python setup
@@ -15,5 +15,5 @@ docker-compose build
 echo ""
 echo "✅ Setup complete!"
 echo ""
-echo "To start NanoClow:"
+echo "To start TestForge:"
 echo "  cd docker && docker-compose up"

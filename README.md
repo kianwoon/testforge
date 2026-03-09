@@ -150,7 +150,7 @@ ANTHROPIC_API_KEY=sk-ant-xxx...
 # Agent Settings (with defaults)
 AGENT_HOST=0.0.0.0
 AGENT_PORT=8000
-SHARED_VOLUME_PATH=/nanoclaw
+SHARED_VOLUME_PATH=/testforge
 
 # Bot Settings (with defaults)
 BOT_HOST=0.0.0.0

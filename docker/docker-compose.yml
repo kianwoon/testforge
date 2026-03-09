@@ -5,9 +5,9 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.agent
-    container_name: nanoclaw-agent
+    container_name: testforge-agent
     volumes:
-      - ../shared:/nanoclaw
+      - ../shared:/testforge
     ports:
       - "8000:8000"
     env_file:
@@ -20,7 +20,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.bot
-    container_name: nanoclaw-bot
+    container_name: testforge-bot
     depends_on:
       - agent
     ports:
@@ -35,7 +35,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.teams-bot
-    container_name: nanoclaw-teams-bot
+    container_name: testforge-teams-bot
     depends_on:
       - agent
     ports:

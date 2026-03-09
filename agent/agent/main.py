@@ -5,7 +5,7 @@ from .api import router
 
 load_dotenv()
 
-app = FastAPI(title="NanoClow Agent")
+app = FastAPI(title="TestForge Agent")
 app.include_router(router)
 
 @app.get("/health")
