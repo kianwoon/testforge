@@ -31,6 +31,29 @@ and Playwright execution.
 ✔ Produce reusable test assets for CI pipelines
 ✔ Follow Registry-First architecture (no duplicate selectors)
 
+## The Problem We Solve
+
+**Before TestForge:**
+
+- Business Analyst writes test cases in Word/JIRA
+- Manual testers execute them manually
+- Automation engineers take weeks to convert to scripts
+- Test cases stay manual because "we don't have time"
+
+**After TestForge:**
+
+- BA submits test case via Teams/WhatsApp
+- TestForge generates validated Playwright script
+- Script is ready for execution in under a minute
+- Test automation becomes a continuous process, not a project
+
+**Who benefits:**
+
+- **Business Analysts** - Their test cases actually get automated
+- **Manual Testers** - Can contribute to automation without coding
+- **Automation Engineers** - Focus on complex scenarios, not repetitive scripts
+- **Teams** - Faster feedback, more coverage, less manual work
+
 ## Quick Start
 
 ```bash
