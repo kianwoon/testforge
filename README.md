@@ -175,6 +175,26 @@ and validation gates at every step.
 └─────────────────────────────────────────────────────────────┘
 ```
 
+## AI Safety and Validation
+
+TestForge does not execute AI-generated code blindly. Every generated script
+passes through multiple validation gates before execution.
+
+**Validation checks:**
+
+- **Syntax verification** - Python code must parse correctly
+- **Playwright API validation** - Only approved Playwright methods allowed
+- **Locator resolution** - Selectors must reference existing page objects
+- **Duplicate detection** - Prevent redundant test generation
+- **Manifest cross-check** - All references validated against registry
+
+**Safety guarantees:**
+
+- Generated scripts are never auto-executed without passing validation
+- All selectors come from the Registry-First page object model
+- Failed validation blocks execution and reports specific issues
+- Optional human approval gate before production runs
+
 ## API Endpoints
 
 ### Agent API (port 8000)
