@@ -56,6 +56,8 @@ and Playwright execution.
 
 ## Quick Start
 
+Get TestForge running in under 5 minutes.
+
 ```bash
 # 1. Clone and setup
 git clone <repo>
