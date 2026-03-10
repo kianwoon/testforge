@@ -1,15 +1,35 @@
 # TestForge
 
-AI-driven Playwright test generation via WhatsApp and Microsoft Teams.
+Turn manual test cases into Playwright automation scripts in minutes.
 
-## What is TestForge?
+TestForge is an AI-assisted testing platform that converts human test cases
+into validated Playwright automation scripts.
 
-TestForge is an internal QA automation tool that:
-- Accepts test cases via structured natural language
-- Uses AI (Claude) to generate async Playwright Python scripts
-- Follows Registry-First architecture (extends POM, never duplicates)
-- Validates scripts with syntax checking and DOM cross-reference
-- Notifies team via WhatsApp or Microsoft Teams when scripts are ready
+Testers and Business Analysts can submit scenarios through WhatsApp or
+Microsoft Teams, and TestForge automatically generates, validates, and
+executes the tests—no coding required.
+
+**The goal is simple:** remove the friction between manual test cases and
+automated test execution.
+
+## Why TestForge
+
+Traditional test automation has three problems:
+
+• **Writing automation scripts is slow** - Testers spend more time coding than testing
+• **Test cases from BAs rarely get automated** - Business requirements stay manual
+• **AI-generated tests often hallucinate** - Selectors fail, logic breaks, tests don't run
+
+TestForge solves this by combining AI generation with structured validation
+and Playwright execution.
+
+**Key capabilities:**
+
+✔ Convert natural language test cases into Playwright scripts
+✔ Validate generated code before execution
+✔ Integrate with collaboration tools (Teams / WhatsApp)
+✔ Produce reusable test assets for CI pipelines
+✔ Follow Registry-First architecture (no duplicate selectors)
 
 ## Quick Start
 
