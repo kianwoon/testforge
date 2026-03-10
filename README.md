@@ -195,6 +195,91 @@ passes through multiple validation gates before execution.
 - Failed validation blocks execution and reports specific issues
 - Optional human approval gate before production runs
 
+## See It In Action
+
+Here's how TestForge converts a data-driven test scenario into a
+working Playwright script.
+
+**Input Test Case (submitted via Teams/WhatsApp):**
+
+```
+Name: User login with multiple credentials
+Scope: Authentication Module
+Priority: P1
+
+Data:
+  - admin@example.com / Admin123! - Should succeed
+  - user@example.com / User123! - Should succeed
+  - locked@example.com / Locked123! - Should show account locked
+
+Steps:
+  1. Navigate to login page
+  2. Enter username and password from data set
+  3. Click login button
+  4. Verify appropriate result for each credential set
+```
+
+**Generated Playwright Script (data-driven):**
+
+```python
+import pytest
+from playwright.sync_api import Page, expect
+
+# Test data from Registry-First test data manager
+LOGIN_CREDENTIALS = [
+    {
+        "email": "admin@example.com",
+        "password": "Admin123!",
+        "expected_result": "success"
+    },
+    {
+        "email": "user@example.com",
+        "password": "User123!",
+        "expected_result": "success"
+    },
+    {
+        "email": "locked@example.com",
+        "password": "Locked123!",
+        "expected_result": "account_locked"
+    }
+]
+
+@pytest.mark.parametrize("credentials", LOGIN_CREDENTIALS)
+def test_login_with_multiple_credentials(page: Page, credentials):
+    """Test login with multiple credential sets"""
+
+    # Navigate from Registry-First page object
+    page.goto("https://app.example.com")
+
+    # Fill login form using registered locators
+    page.fill("#email", credentials["email"])
+    page.fill("#password", credentials["password"])
+    page.click("#login-button")
+
+    # Verify result based on credential type
+    if credentials["expected_result"] == "success":
+        expect(page.locator("#dashboard")).to_be_visible()
+    elif credentials["expected_result"] == "account_locked":
+        expect(page.locator("#locked-message")).to_be_visible()
+```
+
+**Result:**
+```
+✓ Test generated
+✓ Validation passed (syntax, API, locators)
+✓ Ready for execution
+✓ Notification sent to Teams
+```
+
+**What happened:**
+1. Test case submitted via Teams
+2. TestForge parsed the data-driven scenario
+3. Generated parameterized test using `@pytest.mark.parametrize`
+4. Validated all selectors against Registry-First manifest
+5. Delivered production-ready script with test data
+
+**Time from submission to runnable script:** ~45 seconds
+
 ## API Endpoints
 
 ### Agent API (port 8000)
