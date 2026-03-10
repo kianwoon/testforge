@@ -398,20 +398,56 @@ To update your configuration after initial setup:
 - **Solution:** Check ANTHROPIC_API_KEY is valid and has sufficient credits
 
 
-## Directory Structure
+## Project Structure
+
+TestForge is organized around three core engines: AI generation, validation,
+and execution—communicating through a shared registry.
 
 ```
 testforge/
-├── bot/              # Multi-platform bot service (WhatsApp/Teams)
-├── agent/            # Agent sandbox service
-├── shared/           # Docker volume mount
-│   ├── ingress/      # Incoming test cases
-│   ├── egress/       # Generated scripts
-│   ├── page_objects/ # POM registry
-│   └── manifest.json # Source of truth
-├── docker/           # Container configurations
-└── scripts/          # Setup and utility scripts
+│
+├── agent/                    # AI Generation Engine
+│   ├── agent/
+│   │   ├── main.py          # Agent orchestrator
+│   │   ├── api.py           # HTTP endpoints
+│   │   ├── models.py        # Test case models
+│   │   ├── manifest_manager.py   # Registry management
+│   │   └── registry_auditor.py   # Validation engine
+│   └── tests/               # Agent unit tests
+│
+├── bot/                      # Chat Interface Layer
+│   ├── bot/
+│   │   ├── parser.py        # Test case parser
+│   │   ├── teams_bot.py     # Microsoft Teams integration
+│   │   └── whatsapp.py      # WhatsApp integration
+│   └── tests/               # Bot unit tests
+│
+├── shared/                   # Shared Volume (Registry)
+│   ├── manifest.json        # Source of truth
+│   ├── page_objects/        # Registry-First POM
+│   ├── ingress/             # Incoming test cases
+│   └── egress/              # Generated scripts
+│
+├── docker/                   # Container configurations
+│   ├── agent.Dockerfile
+│   ├── bot.Dockerfile
+│   └── docker-compose.yml
+│
+├── scripts/                  # Setup & utilities
+│   ├── setup.sh            # Interactive setup
+│   └── setup_cli.py        # Setup CLI
+│
+└── docs/                     # Documentation
+    ├── teams-setup.md      # Teams configuration
+    └── plans/              # Design documents
 ```
+
+**Key design principles:**
+
+- **Registry-First** - All selectors sourced from `manifest.json`
+- **Sandbox isolation** - Agent runs in isolated container
+- **Shared volume** - Bot and Agent communicate via shared filesystem
+- **Validation gate** - Registry auditor validates before scripts are usable
 
 ## Development
 
