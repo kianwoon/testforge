@@ -154,7 +154,6 @@ and validation gates at every step.
 │               Validation Gate                                │
 │  • Python syntax verification                                │
 │  • Playwright API validation                                 │
-│  • Playwright API validation                                 │
 │  • Locator resolution checks                                 │
 │  • Duplicate test detection                                  │
 └─────────────────────────┬───────────────────────────────────┘
